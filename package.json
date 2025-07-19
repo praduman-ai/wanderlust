@@ -1,0 +1,28 @@
+{
+  "name": "shree",
+  "version": "1.0.0",
+  "main": "index.cjs",
+  "scripts": {
+    "start": "node main.cjs",
+    "dev": "nodemon main.cjs"
+  },
+  "lint": {
+    "lint:ejs": "ejs-lint views/index.ejs"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "method-override": "^3.0.0",
+    "mongoose": "^8.16.3"
+  },
+  "devDependencies": {
+    "ejs-lint": "^2.0.1"
+  }
+}
