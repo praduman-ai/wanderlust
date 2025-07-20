@@ -4,9 +4,8 @@ const mongoose = require("mongoose");
 const Listing = require("./models/listing.cjs");
 const path = require("path");
 const methodOverride = require("method-override");
-const ejsLint = require('ejs-lint');
-const initData = require("./init/data.cjs");
-
+const ejs = require("ejs");
+const ejsMate = require("ejs-mate");
 
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
@@ -27,6 +26,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+app.engine("ejs", ejsMate);
 
 app.get("/", (req, res) => {
   res.send("Hi, I am root");
@@ -61,35 +61,34 @@ app.post("/listings", async (req, res) => {
 });
 
 //Edit Route
-app.put("/listings/:id", async (req, res) => {
+app.put("/listings/:id/edit", async (req, res) => {
   console.log("EDIT (PUT) route hit");  // Log that should show
   let { id } = req.params;
-  let updatedListing = await Listing.findByIdAndUpdate(id, req.body.listing, {
-    new: true,
-    runValidators: true,
-  });
-  console.log("Updated:", updatedListing);
-  res.redirect(`/listings/${updatedListing._id}`);
+  let listings = await Listing.findById(id);
+  if (!listings) {
+    return res.status(404).send("Listing not found");
+  }
+  console.log("Listing found:", listings); // Log the found listing
+  res.locals.listing = listings;
+  res.locals.id = id;
+  res.render("listings/edit.ejs", { listings });
 });
 
 //Update Route
 app.put("/listings/:id", async (req, res) => {
   let { id } = req.params;
   await Listing.findByIdAndUpdate(id, { ...req.body.listing });
-  res.redirect(`/listings/${id}`);
+  res.redirect(`/listings/ ${id}`);
 });
 
+//Delete Route
 app.delete("/listings/:id", async (req, res) => {
-  console.log("DELETE route hit"); // Log at the top to confirm route is triggered
-
+  console.log("DELETE"); 
   let { id } = req.params;
   let deletedListing = await Listing.findByIdAndDelete(id);
-  console.log("Deleted listing:", deletedListing); // Log the deleted item
-
+  console.log(deletedListing);
   res.redirect("/listings"); 
 });
-
-
 
 app.listen(3000, () => {
   console.log("server is listening to port 3000");
