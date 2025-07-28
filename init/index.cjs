@@ -11,9 +11,9 @@ main()
   .catch((err) => {
     console.log(err);
   });
-for (let i = 0; i < initData.length; i++) {
-  if (!initData[i].title) {
-    console.log(` Missing title at index ${i}`, initData[i]);
+for (let i = 0; i < initData.data.length; i++) {
+  if (!initData.data[i].title) {
+    console.log(` Missing title at index ${i}`, initData.data[i]);
   }
 }
 
@@ -25,6 +25,8 @@ const initDB = async () => {
   await Listing.deleteMany({});
   await Listing.insertMany(initData.data);
   console.log("data was initialized");
+  mongoose.connection.close();
+  console.log("connection closed");
 };
 
 initDB();

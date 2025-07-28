@@ -1,16 +1,24 @@
-<% layout("/layouts/boilerplate") -%>
-<h3> All Listings</h3>
-<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 row-cols-1 g-4">
-<%for(let listing of allListings) { %>
-<div class="card" >
-  <img src="listing.image" class="card-img-top" alt="listing image" style="height: 20rem;">
-  <div class="card-body">
-    <p class="card-text"><b><%= listing.title %></b> </p>
-    <p class="card-text">&#8377;<%= listing.price.toLocaleString("en-IN") %>/night </p>
-    <a href="/listings/<%= listing._id %>" class="btn btn-primary">View Listing</a>
-  </div>
+<% layout("layouts/boilerplate") -%>
+<h3 style="margin-top: 20px; font-size: 35px; font-family: plus jakarta, sans-serif;"> <b>All Listings</b></h3>
+<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 row-cols-1 g-4" >
+  <% listings.forEach(listing => { %>
+    <div class="col mb-4">
+      <a href="/listings/<%=listing._id%>" style="text-decoration: none;">
+        <div class="card h-100" style=" margin-top: 20px;">
+          <img src="<%= listing.image %>" 
+               class="card-img-top" 
+               alt="listing image" 
+               style="height: 20rem;" />
+          <div class="card-body">
+            <h5 class="card-title"><b><%= listing.title %></b></h5>
+            <p class="card-text">&#8377; <%= listing.price.toLocaleString("en-IN") %>/night</p>
+            <p class="card-text"><%= listing.location %>, <%= listing.country %></p>
+          </div>
+          <div class="card-img-overlay">
+            <p class="card-text"><small>Last updated 3 mins ago</small></p>
+          </div>
+        </div>
+      </a>
+    </div>
+  <% }) %>
 </div>
-<% } %>
-</div>
- <ul>
-      
